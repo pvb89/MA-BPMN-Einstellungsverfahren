@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/1.0" id="Definitions_0ngek8a" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
+  <decision id="Decision_12mus5o" name="Entscheidung für einen Bewerber treffen">
+    <extensionElements>
+      <biodi:bounds x="448" y="81" width="180" height="80" />
+      <biodi:edge source="Decision_1vrnzay">
+        <biodi:waypoints x="461" y="228" />
+        <biodi:waypoints x="502" y="161" />
+      </biodi:edge>
+      <biodi:edge source="InputData_0blwwb4">
+        <biodi:waypoints x="680" y="320" />
+        <biodi:waypoints x="586" y="161" />
+      </biodi:edge>
+    </extensionElements>
+    <informationRequirement>
+      <requiredDecision href="#Decision_1vrnzay" />
+    </informationRequirement>
+    <informationRequirement>
+      <requiredInput href="#InputData_0blwwb4" />
+    </informationRequirement>
+    <decisionTable id="decisionTable_1">
+      <input id="input_1" label="Score">
+        <inputExpression id="inputExpression_1" typeRef="integer">
+          <text>score</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0f4hcs7" label="Persönlicher Eindruck">
+        <inputExpression id="LiteralExpression_1fbcr2d" typeRef="string">
+          <text>personlicherEindruck</text>
+        </inputExpression>
+      </input>
+      <output id="output_1" label="Einstellen?" name="einstellen" typeRef="string" />
+      <rule id="DecisionRule_1jy0dew">
+        <inputEntry id="UnaryTests_03fdq1s">
+          <text>&lt;20</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0apwsjs">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1fa0izu">
+          <text>"Nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_04yild6">
+        <inputEntry id="UnaryTests_0l0ssw0">
+          <text>[20..50]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_11lstg5">
+          <text>"a"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1hbb9hv">
+          <text>"Ja"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1xkckgn">
+        <inputEntry id="UnaryTests_15siwvf">
+          <text>[20..50]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_03qkroc">
+          <text>not("a")</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0dkjh1m">
+          <text>"Nein"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0pjlsy5">
+        <inputEntry id="UnaryTests_0yk3r4x">
+          <text>&gt;50</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0su2u5j">
+          <text>"a","b"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1ca4qnr">
+          <text>"Ja"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0kbmnoh">
+        <inputEntry id="UnaryTests_0b72kvy">
+          <text>&gt;50</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1i2n9is">
+          <text>"c"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_07awbob">
+          <text>"Nein"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <inputData id="InputData_1jzys5r" name="Aufgabe aus Vorstellungsgespräch">
+    <extensionElements>
+      <biodi:bounds x="444" y="383" width="125" height="45" />
+    </extensionElements>
+  </inputData>
+  <inputData id="InputData_1el13al" name="Fachliche Eignung">
+    <extensionElements>
+      <biodi:bounds x="270" y="380" width="125" height="45" />
+    </extensionElements>
+  </inputData>
+  <decision id="Decision_1vrnzay" name="Score Bewerber">
+    <extensionElements>
+      <biodi:bounds x="346" y="228" width="180" height="80" />
+      <biodi:edge source="InputData_1jzys5r">
+        <biodi:waypoints x="506" y="383" />
+        <biodi:waypoints x="477" y="308" />
+      </biodi:edge>
+      <biodi:edge source="InputData_1el13al">
+        <biodi:waypoints x="358" y="380" />
+        <biodi:waypoints x="391" y="308" />
+      </biodi:edge>
+      <biodi:edge source="InputData_1r09rf0">
+        <biodi:waypoints x="281" y="315" />
+        <biodi:waypoints x="346" y="290" />
+      </biodi:edge>
+    </extensionElements>
+    <informationRequirement>
+      <requiredInput href="#InputData_1jzys5r" />
+    </informationRequirement>
+    <informationRequirement>
+      <requiredInput href="#InputData_1el13al" />
+    </informationRequirement>
+    <informationRequirement>
+      <requiredInput href="#InputData_1r09rf0" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_0b7o9dm" hitPolicy="COLLECT" aggregation="SUM">
+      <input id="InputClause_1o9m3db" label="Ehrenamt?">
+        <inputExpression id="LiteralExpression_00w7p92" typeRef="boolean">
+          <text>ehrenamt</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_1qfg7hs" label="Aufgabe aus VG gelöst?">
+        <inputExpression id="LiteralExpression_0ial079" typeRef="boolean">
+          <text>aufgabenErgebnis</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_1d630ls" label="Fachlich geeignet?">
+        <inputExpression id="LiteralExpression_1icb0t9" typeRef="boolean">
+          <text>fachlicheEignung</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0oc7xrx" label="Score" name="score" typeRef="integer" />
+      <rule id="DecisionRule_0sn9dd1">
+        <description>wenn er ein Ehrenamt hat, kriegt er 10 Punkte</description>
+        <inputEntry id="UnaryTests_1387wff">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_03k9qqr">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0s6q8iv">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1nk3t7k">
+          <text>10</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_06k3h8m">
+        <description>wenn nicht -10</description>
+        <inputEntry id="UnaryTests_09937r9">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1oz3axm">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_13nco05">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0uv56i8">
+          <text>-10</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_15jefkh">
+        <description>wenn aufgabe gelöst, kriegt er 30 Punkte, rest egal</description>
+        <inputEntry id="UnaryTests_00xd4hr">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_13qeon1">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1yjqowu">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0i5lvja">
+          <text>30</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_082dim9">
+        <description>wenn aufgabe nicht gelöst, -30 Punkte</description>
+        <inputEntry id="UnaryTests_1czt8jf">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1b5y6pa">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1msw9mr">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0j9jo0f">
+          <text>-30</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0mg4zge">
+        <description>kann vllt trotzdem fachlich gut sein, je nach fragen und erklärungen in VG</description>
+        <inputEntry id="UnaryTests_10x0q0v">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1ke994l">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_10t9gai">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0bn8h41">
+          <text>50</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1d5unxa">
+        <description>wenn fachlich nicht geeignet, -50 (=wichtigstes Punktekriterium)</description>
+        <inputEntry id="UnaryTests_1cccraw">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1ogurm4">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_10byvp3">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_13s341o">
+          <text>-50</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <inputData id="InputData_0blwwb4" name="Persönlicher Eindruck">
+    <extensionElements>
+      <biodi:bounds x="631" y="320" width="125" height="45" />
+    </extensionElements>
+  </inputData>
+  <inputData id="InputData_1r09rf0" name="Ehrenamt">
+    <extensionElements>
+      <biodi:bounds x="156" y="307" width="125" height="45" />
+    </extensionElements>
+  </inputData>
+</definitions>

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/1.0" id="Definitions_1bxuyil" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
+  <decision id="Decision_1c0sjwu" name="Interne Anforderungen an Bewerber">
+    <extensionElements>
+      <biodi:bounds x="445" y="316" width="180" height="80" />
+      <biodi:edge source="BusinessKnowledgeModel_0nkb0vm">
+        <biodi:waypoints x="665" y="357" />
+        <biodi:waypoints x="625" y="358" />
+      </biodi:edge>
+      <biodi:edge source="InputData_1hntvq7">
+        <biodi:waypoints x="352" y="475" />
+        <biodi:waypoints x="445" y="387" />
+      </biodi:edge>
+      <biodi:edge source="InputData_0u745yv">
+        <biodi:waypoints x="523" y="496" />
+        <biodi:waypoints x="545" y="396" />
+      </biodi:edge>
+      <biodi:edge source="InputData_1gek6se">
+        <biodi:waypoints x="687" y="474" />
+        <biodi:waypoints x="607" y="396" />
+      </biodi:edge>
+    </extensionElements>
+    <informationRequirement>
+      <requiredInput href="#InputData_1hntvq7" />
+    </informationRequirement>
+    <informationRequirement>
+      <requiredInput href="#InputData_0u745yv" />
+    </informationRequirement>
+    <informationRequirement>
+      <requiredInput href="#InputData_1gek6se" />
+    </informationRequirement>
+    <knowledgeRequirement>
+      <requiredKnowledge href="#BusinessKnowledgeModel_0nkb0vm" />
+    </knowledgeRequirement>
+    <decisionTable id="decisionTable_1">
+      <input id="input_1" label="Abgeschlossenes Studium?">
+        <inputExpression id="inputExpression_1" typeRef="boolean">
+          <text>studium</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0iokmw1" label="Notendurchschnitt">
+        <inputExpression id="LiteralExpression_0n3bty7" typeRef="string">
+          <text>nc</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_17pqkn9" label="Berufserfahrung">
+        <inputExpression id="LiteralExpression_0eto2u5" typeRef="string">
+          <text>berufserfahrung</text>
+        </inputExpression>
+      </input>
+      <output id="output_1" label="Anforderungen erfüllt?" name="anforderung" typeRef="boolean" />
+      <rule id="DecisionRule_1e1d4e2">
+        <inputEntry id="UnaryTests_0eftlix">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1go2e2h">
+          <text>"a"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1xjxf5z">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0x5ir9u">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1vmjw9s">
+        <inputEntry id="UnaryTests_0ifr73m">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0bktfg2">
+          <text>"b"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_12oqaq6">
+          <text>"a"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0stqano">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1a7zn47">
+        <inputEntry id="UnaryTests_153178p">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1hg49dh">
+          <text>"b"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0g58vxw">
+          <text>"b"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0h40nm7">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1pjpg14">
+        <inputEntry id="UnaryTests_1qax6st">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0b076b1">
+          <text>"c"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0bg9d8f">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1rsjj5w">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_10nempr">
+        <inputEntry id="UnaryTests_1jq3p4k">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0i2z75s">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1kmg8em">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0ydwopl">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <inputData id="InputData_0u745yv" name="Notendurchschnitt">
+    <extensionElements>
+      <biodi:bounds x="455" y="496" width="125" height="45" />
+    </extensionElements>
+  </inputData>
+  <inputData id="InputData_1gek6se" name="Jahre Berufserfahrung">
+    <extensionElements>
+      <biodi:bounds x="648" y="474" width="125" height="45" />
+    </extensionElements>
+  </inputData>
+  <inputData id="InputData_1hntvq7" name="Abgeschlossenes Studium?">
+    <extensionElements>
+      <biodi:bounds x="264" y="475" width="125" height="45" />
+    </extensionElements>
+  </inputData>
+  <inputData id="InputData_1ieixxh" name="Gehaltsvorstellung">
+    <extensionElements>
+      <biodi:bounds x="554" y="201" width="125" height="45" />
+    </extensionElements>
+  </inputData>
+  <knowledgeSource id="KnowledgeSource_1xsnlo0" name="Leiter Personalmanagement">
+    <extensionElements>
+      <biodi:bounds x="840" y="325" width="100" height="63" />
+    </extensionElements>
+  </knowledgeSource>
+  <businessKnowledgeModel id="BusinessKnowledgeModel_0nkb0vm" name="Interne Richtlinien">
+    <extensionElements>
+      <biodi:bounds x="665" y="334" width="135" height="46" />
+      <biodi:edge source="KnowledgeSource_1xsnlo0">
+        <biodi:waypoints x="840" y="355" />
+        <biodi:waypoints x="800" y="353" />
+      </biodi:edge>
+    </extensionElements>
+    <authorityRequirement>
+      <requiredAuthority href="#KnowledgeSource_1xsnlo0" />
+    </authorityRequirement>
+  </businessKnowledgeModel>
+  <decision id="Decision_1tje05x" name="Vorauswahl des Bewerbers">
+    <extensionElements>
+      <biodi:bounds x="322" y="185" width="180" height="80" />
+      <biodi:edge source="InputData_1ieixxh">
+        <biodi:waypoints x="554" y="224" />
+        <biodi:waypoints x="502" y="224" />
+      </biodi:edge>
+      <biodi:edge source="Decision_1c0sjwu">
+        <biodi:waypoints x="505" y="316" />
+        <biodi:waypoints x="466" y="265" />
+      </biodi:edge>
+    </extensionElements>
+    <informationRequirement>
+      <requiredInput href="#InputData_1ieixxh" />
+    </informationRequirement>
+    <informationRequirement>
+      <requiredDecision href="#Decision_1c0sjwu" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_1wmjzme">
+      <input id="InputClause_1a31bed" label="Anforderung erfüllt?">
+        <inputExpression id="LiteralExpression_1lrdfme" typeRef="boolean">
+          <text>anforderung</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0wv7v0x" label="Gehaltsvorstellung">
+        <inputExpression id="LiteralExpression_1pu2b6b" typeRef="long">
+          <text>gehaltsvorstellung</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0466z8j" label="Zum Gespräch einladen?" name="einladung" typeRef="boolean" />
+      <rule id="DecisionRule_08f8793">
+        <inputEntry id="UnaryTests_081ga5d">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_02b79jh">
+          <text>&lt;= 80000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_02f16yn">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0gspt2m">
+        <inputEntry id="UnaryTests_1ouw3lb">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0z9du29">
+          <text>&gt; 80000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_048ajs2">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0xfppol">
+        <inputEntry id="UnaryTests_1wksedl">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1nts9wi">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_117292y">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>

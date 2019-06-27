@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0tkqdpf" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
+  <bpmn:collaboration id="Terminfindung">
+    <bpmn:participant id="Participant_0r2e44j" name="Mitarbeiter Bewerbermanagement" processRef="Terminfindung2" />
+    <bpmn:participant id="Participant_1n5ijp3" name="Bewerber" />
+    <bpmn:messageFlow id="MessageFlow_1psetcr" sourceRef="UserTask_1azck0v" targetRef="Participant_1n5ijp3" />
+    <bpmn:messageFlow id="MessageFlow_1n7lyek" sourceRef="Participant_1n5ijp3" targetRef="UserTask_1azck0v" />
+    <bpmn:messageFlow id="MessageFlow_035hh08" sourceRef="ServiceTask_0kwymv2" targetRef="Participant_1n5ijp3" />
+  </bpmn:collaboration>
+  <bpmn:process id="Terminfindung2" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Vorauswahl der Bewerber ist getroffen">
+      <bpmn:outgoing>SequenceFlow_1vvf0vc</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_1dq23j7" name="Konflikt aufgetreten?">
+      <bpmn:incoming>SequenceFlow_0gx8pnq</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_03gwof3</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1qc6axz</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:manualTask id="UserTask_1azck0v" name="Gesprächstermin vereinbaren">
+      <bpmn:incoming>SequenceFlow_1vvf0vc</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_16f4upm</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:serviceTask id="ServiceTask_0qqdq4s" name="Gesprächstermin in Kalender eintragen">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="url">https://www.googleapis.com/calendar/v3/calendars/r7lcknr207cr166jbl34b2tluk@group.calendar.google.com/events</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Content-Type">application/json</camunda:entry>
+                <camunda:entry key="Authorization">Bearer ya29.Gls0BxAHUC5Ai72rhDZ-mOdFES_4IMbBr-odKCejz4kOqImqJuALySwSbkPVVaP0kcSKfgNMo-4tY5mYnDqmdJ8TDfhdja5YMzlX5wZBUdQ7ZNgos20YXrwa0ya7</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="payload">
+              <camunda:script scriptFormat="Javascript">// Variablen laden
+var eingabeDatum = execution.getVariable("eingabeDatum");
+var eingabeZeit = execution.getVariable("eingabeZeit");
+var bewerber = execution.getVariable("bewerber");
+
+// Datum in String formatieren
+var eingabeDatumString = getFormattedDate(eingabeDatum);
+
+execution.setVariable("eingabeDatumString", eingabeDatumString);
+
+if (eingabeZeit == "a") {
+
+var eingabeStartZeit = "06:00:00";
+var eingabeEndZeit = "06:59:00";
+
+} else if (eingabeZeit == "b") {
+
+var eingabeStartZeit = "07:00:00";
+var eingabeEndZeit = "07:59:00";
+
+} else if (eingabeZeit == "c") {
+
+var eingabeStartZeit = "08:00:00";
+var eingabeEndZeit = "08:59:00";
+
+} else if (eingabeZeit == "d") {
+
+var eingabeStartZeit = "09:00:00";
+var eingabeEndZeit = "09:59:00";
+
+}
+
+execution.setVariable("eingabeStartZeit", eingabeStartZeit);
+execution.setVariable("eingabeEndZeit", eingabeEndZeit);
+
+// String im JSON Format erstellen
+var str = "{\"start\": {\"timeZone\": \"Europe/Berlin\",\"dateTime\": \"" + eingabeDatumString + "T" + eingabeStartZeit + "Z\"},\"end\": {\"timeZone\": \"Europe/Berlin\",\"dateTime\":\"" + eingabeDatumString + "T" + eingabeEndZeit + "Z\"}, \"summary\": \"Bewerbungsgespräch " + bewerber + "\"}";
+
+// Eigene FN um aus dem Date ein ISO-Date konformen String zu generieren
+function getFormattedDate(date) {
+
+var day = date.getDate();
+var month = date.getMonth()+1;
+var year = date.getYear() + 1900;
+
+if (month &lt; 10) {
+month = "0" + month;
+}
+
+return year + '-' + month + '-' + day ;
+
+}
+
+str;</camunda:script>
+            </camunda:inputParameter>
+            <camunda:outputParameter name="Output_155sdul">
+              <camunda:script scriptFormat="Javascript">var statusCode = connector.getVariable("statusCode");
+
+if (statusCode == "200" ) {
+connector.setVariable("statusCodeBoolean", true);
+} else {
+connector.setVariable("statusCodeBoolean", false);
+}</camunda:script>
+            </camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1ybyc2g</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0gx8pnq</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_1vvf0vc" sourceRef="StartEvent_1" targetRef="UserTask_1azck0v" />
+    <bpmn:sequenceFlow id="SequenceFlow_16f4upm" sourceRef="UserTask_1azck0v" targetRef="UserTask_1kvnuqq" />
+    <bpmn:sequenceFlow id="SequenceFlow_1ybyc2g" sourceRef="UserTask_1kvnuqq" targetRef="ServiceTask_0qqdq4s" />
+    <bpmn:sequenceFlow id="SequenceFlow_03gwof3" name="Ja" sourceRef="ExclusiveGateway_1dq23j7" targetRef="UserTask_0pcovrn">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{not statusCodeBoolean}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1qc6axz" name="Nein" sourceRef="ExclusiveGateway_1dq23j7" targetRef="ExclusiveGateway_0tcwcee">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{statusCodeBoolean}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_0a0ckjq" sourceRef="ExclusiveGateway_0tcwcee" targetRef="ParallelGateway_1p6932s" />
+    <bpmn:sequenceFlow id="SequenceFlow_0x587yp" sourceRef="ParallelGateway_1p6932s" targetRef="ServiceTask_0kwymv2" />
+    <bpmn:sequenceFlow id="SequenceFlow_1pckwkb" sourceRef="ParallelGateway_1p6932s" targetRef="ServiceTask_1jdj8rw" />
+    <bpmn:sequenceFlow id="SequenceFlow_0o1vunc" sourceRef="UserTask_0pcovrn" targetRef="ExclusiveGateway_0tcwcee" />
+    <bpmn:sequenceFlow id="SequenceFlow_1aadq2o" sourceRef="ServiceTask_0kwymv2" targetRef="ExclusiveGateway_194izjp" />
+    <bpmn:sequenceFlow id="SequenceFlow_1c5ye8m" sourceRef="ServiceTask_1jdj8rw" targetRef="ExclusiveGateway_194izjp" />
+    <bpmn:sequenceFlow id="SequenceFlow_1jp3a9e" sourceRef="ExclusiveGateway_194izjp" targetRef="EndEvent_1dygxnm" />
+    <bpmn:endEvent id="EndEvent_1dygxnm" name="Gesprächstermin gefunden">
+      <bpmn:incoming>SequenceFlow_1jp3a9e</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="UserTask_1kvnuqq" name="Termin eingeben" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="bewerber" label="Name des Bewerbers" type="string" />
+          <camunda:formField id="eingabeDatum" label="Datum auswählen" type="date" />
+          <camunda:formField id="eingabeZeit" label="Uhrzeit auswählen" type="enum">
+            <camunda:value id="a" name="8:00 - 9:00" />
+            <camunda:value id="b" name="9:00 - 10:00" />
+            <camunda:value id="c" name="10:00 - 11:00" />
+            <camunda:value id="d" name="11:00 - 12:00" />
+          </camunda:formField>
+        </camunda:formData>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="Javascript">// SpinJSON laden
+var bewerberJSON = execution.getVariable("bewerberJSON");
+
+// Zähler laden - um immer an das naechste Array im SpinJSON zu gelangen
+var zahlerAuslesen = execution.getVariable("zahlerTerminfindung");
+
+// Erstes Array des SpinJSON auslesen 
+var jsonVorname = S(bewerberJSON).prop("bewerber").elements().get(zahlerAuslesen).prop("vorname").value();
+var jsonNachname = S(bewerberJSON).prop("bewerber").elements().get(zahlerAuslesen).prop("nachname").value();
+var jsonMail = S(bewerberJSON).prop("bewerber").elements().get(zahlerAuslesen).prop("eMail").value();
+
+var bewerber = jsonVorname + " " + jsonNachname;
+
+// Ausgabevariablen setzen
+execution.setVariable("bewerber", bewerber);
+execution.setVariable("mail", jsonMail);
+
+// Zahler erhöhen und neuen Datensatz speichern
+newZahler = zahlerTerminfindung + 1 ;
+execution.setVariable("zahlerTerminfindung", newZahler);</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_16f4upm</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1ybyc2g</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="UserTask_0pcovrn" name="Manuellen Eintrag setzen" camunda:assignee="demo">
+      <bpmn:incoming>SequenceFlow_03gwof3</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0o1vunc</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_0tcwcee">
+      <bpmn:incoming>SequenceFlow_1qc6axz</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0o1vunc</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0a0ckjq</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:parallelGateway id="ParallelGateway_1p6932s">
+      <bpmn:incoming>SequenceFlow_0a0ckjq</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0x587yp</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1pckwkb</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:serviceTask id="ServiceTask_0kwymv2" name="Bewerber den Gesprächstermin senden">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="to">${mail}</camunda:inputParameter>
+            <camunda:inputParameter name="subject">Terminbestätigung - Bewerbungsgespräch bei Firma XY</camunda:inputParameter>
+            <camunda:inputParameter name="text">Hallo ${bewerber},
+
+Dein Bewerbungsgespräch findet am ${eingabeDatumString} um ${eingabeStartZeit} Uhr statt.
+Bitte melde Dich bei Ankunft am Empfang.
+
+Freundliche Grüße,
+Dein HR-Team von XY</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>mail-send</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0x587yp</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1aadq2o</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="ServiceTask_1jdj8rw" name="Bestätigung an Abteilungsleiter senden">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="to">pvonbehren@gmail.com</camunda:inputParameter>
+            <camunda:inputParameter name="subject">Terminbestätigung – Bewerbungsgespräch ${bewerber}</camunda:inputParameter>
+            <camunda:inputParameter name="text">Sehr geehrter Herr Abteilungsleiter,
+
+das Bewerbungsgespräch mit  ${bewerber} findet am ${eingabeDatumString} um ${eingabeStartZeit} Uhr statt.
+
+Freundliche Grüße,
+Mitarbeiter Bewerbermanagement</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>mail-send</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1pckwkb</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1c5ye8m</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:parallelGateway id="ExclusiveGateway_194izjp">
+      <bpmn:incoming>SequenceFlow_1aadq2o</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1c5ye8m</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1jp3a9e</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_0gx8pnq" sourceRef="ServiceTask_0qqdq4s" targetRef="ExclusiveGateway_1dq23j7" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Terminfindung">
+      <bpmndi:BPMNShape id="Participant_0r2e44j_di" bpmnElement="Participant_0r2e44j" isHorizontal="true">
+        <dc:Bounds x="176" y="145" width="1188" height="314" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="251" y="279" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="231" y="322" width="77" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_1kvnuqq_di" bpmnElement="UserTask_1kvnuqq">
+        <dc:Bounds x="497" y="255" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1dq23j7_di" bpmnElement="ExclusiveGateway_1dq23j7" isMarkerVisible="true">
+        <dc:Bounds x="801" y="272" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="794.5" y="235" width="63" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_0pcovrn_di" bpmnElement="UserTask_0pcovrn">
+        <dc:Bounds x="776" y="349" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1dygxnm_di" bpmnElement="EndEvent_1dygxnm">
+        <dc:Bounds x="1285" y="279" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1262" y="322" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_0tymo3z_di" bpmnElement="Participant_1n5ijp3" isHorizontal="true">
+        <dc:Bounds x="176" y="42" width="1188" height="71" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1ybyc2g_di" bpmnElement="SequenceFlow_1ybyc2g">
+        <di:waypoint x="597" y="297" />
+        <di:waypoint x="634" y="297" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MessageFlow_1psetcr_di" bpmnElement="MessageFlow_1psetcr">
+        <di:waypoint x="372" y="257" />
+        <di:waypoint x="372" y="113" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_16f4upm_di" bpmnElement="SequenceFlow_16f4upm">
+        <di:waypoint x="443" y="297" />
+        <di:waypoint x="497" y="297" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MessageFlow_1n7lyek_di" bpmnElement="MessageFlow_1n7lyek">
+        <di:waypoint x="415" y="113" />
+        <di:waypoint x="415" y="257" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1vvf0vc_di" bpmnElement="SequenceFlow_1vvf0vc">
+        <di:waypoint x="287" y="297" />
+        <di:waypoint x="343" y="297" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ParallelGateway_12zon17_di" bpmnElement="ParallelGateway_1p6932s">
+        <dc:Bounds x="990" y="272" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_03gwof3_di" bpmnElement="SequenceFlow_03gwof3">
+        <di:waypoint x="826" y="322" />
+        <di:waypoint x="826" y="349" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="835" y="330" width="12" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0tcwcee_di" bpmnElement="ExclusiveGateway_0tcwcee" isMarkerVisible="true">
+        <dc:Bounds x="907" y="272" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1qc6axz_di" bpmnElement="SequenceFlow_1qc6axz">
+        <di:waypoint x="851" y="297" />
+        <di:waypoint x="907" y="297" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="868" y="279" width="23" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0o1vunc_di" bpmnElement="SequenceFlow_0o1vunc">
+        <di:waypoint x="876" y="389" />
+        <di:waypoint x="932" y="389" />
+        <di:waypoint x="932" y="322" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0a0ckjq_di" bpmnElement="SequenceFlow_0a0ckjq">
+        <di:waypoint x="957" y="297" />
+        <di:waypoint x="990" y="297" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ManualTask_0nv98l1_di" bpmnElement="UserTask_1azck0v">
+        <dc:Bounds x="343" y="257" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_11wdlww_di" bpmnElement="ServiceTask_0qqdq4s">
+        <dc:Bounds x="634" y="257" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1jdj8rw_di" bpmnElement="ServiceTask_1jdj8rw">
+        <dc:Bounds x="1065" y="325" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_0kwymv2_di" bpmnElement="ServiceTask_0kwymv2">
+        <dc:Bounds x="1065" y="192" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0x587yp_di" bpmnElement="SequenceFlow_0x587yp">
+        <di:waypoint x="1015" y="272" />
+        <di:waypoint x="1015" y="232" />
+        <di:waypoint x="1065" y="232" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1pckwkb_di" bpmnElement="SequenceFlow_1pckwkb">
+        <di:waypoint x="1015" y="322" />
+        <di:waypoint x="1015" y="365" />
+        <di:waypoint x="1065" y="365" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MessageFlow_035hh08_di" bpmnElement="MessageFlow_035hh08">
+        <di:waypoint x="1115" y="192" />
+        <di:waypoint x="1115" y="113" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1aadq2o_di" bpmnElement="SequenceFlow_1aadq2o">
+        <di:waypoint x="1165" y="232" />
+        <di:waypoint x="1214" y="232" />
+        <di:waypoint x="1214" y="272" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1c5ye8m_di" bpmnElement="SequenceFlow_1c5ye8m">
+        <di:waypoint x="1165" y="365" />
+        <di:waypoint x="1214" y="365" />
+        <di:waypoint x="1214" y="322" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1jp3a9e_di" bpmnElement="SequenceFlow_1jp3a9e">
+        <di:waypoint x="1239" y="297" />
+        <di:waypoint x="1285" y="297" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ParallelGateway_0rbtz9x_di" bpmnElement="ExclusiveGateway_194izjp">
+        <dc:Bounds x="1189" y="272" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0gx8pnq_di" bpmnElement="SequenceFlow_0gx8pnq">
+        <di:waypoint x="734" y="297" />
+        <di:waypoint x="801" y="297" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
