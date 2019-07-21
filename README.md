@@ -4,7 +4,6 @@
 
 # 1) Einleitung
 
-
 In Hinblick auf den demografischen Wandel sowie dem damit verbundenen War for
 Talents wird es heutzutage für Unternehmen zunehmend wichtiger, ihre neuen
 potentielle Mitarbeiter gut überlegt einzustellen und natürlich die
@@ -233,8 +232,6 @@ folgende Felder:
 | ehrenamt           | boolean  |
 | mail               | string   |
 
- 
-
 \*Leider unterstützt die Camunda Engine keine Double Werte. Somit sind
 Fließkommazahlen nicht möglich. Wir haben uns daher entschieden
 auf enum auszuweichen und dem Anwender die Möglichkeit gegeben für *„nc“* und
@@ -322,8 +319,6 @@ als die erste implementiert. Die *„Call Activity“ „Termin finden“* grei
 auf das zuvor gespeicherte JSON Objekt zurück und liest dessen länge aus. Die
 Lösung erlaubt es uns die Terminfindung und Endauswahl dynamisch auf der Anzahl
 bestehender Bewerber der Vorauswahl zu durchlaufen.
-
- 
 
 Dazu wurde diesmal nicht die *„Loop Cardinality“* genutzt, sondern die
 *„Collection“*. Mit dem Befehl „\${bewerberJSON.prop("bewerber").elements()}“
@@ -483,7 +478,7 @@ Bewerbungsgespräches.
 
 ## 3.11) JSON Datensatz erweitern
 
- Zuletzt werden noch alle wichtigen Daten, die im Verlauf des Prozesses
+Zuletzt werden noch alle wichtigen Daten, die im Verlauf des Prozesses
 entstanden sind, in das JSON Modell gespeichert. Dazu werden zunächst alle
 benötigten Daten geladen und anschließend in das JSON Modell, an der
 entsprechenden Stelle, angehängt.
